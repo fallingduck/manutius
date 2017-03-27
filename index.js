@@ -42,5 +42,5 @@ var host = ''
 var server = http.createServer(router)
 
 server.listen(port, host, function() {
-  console.log('swadesh is running on %s:%s', host, port)
+  console.log('autarkeia is running on %s:%s', host, port)
 })
