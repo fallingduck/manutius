@@ -1,0 +1,12 @@
+{
+  "name": "swadesh",
+  "version": "0.0.0",
+  "description": "Near-zero-configuration self-contained blog-aware websites",
+  "main": "swadesh.js",
+  "scripts": {
+    "start": "node swadesh.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jacob VanDrunen",
+  "license": "ISC"
+}
