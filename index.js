@@ -1,4 +1,6 @@
 var http = require('http')
+var yaml = require('js-yaml')
+var fs = require('fs')
 
 // Array which stores the routes that the server will check requests against
 var routes = []
@@ -36,11 +38,12 @@ var router = routes.reduceRight(function(b, a, i, z) {
 })
 
 // Create the server
-var port = 8080
-var host = ''
+var config = yaml.safeLoad(fs.readFileSync('config.yaml', 'utf8'));
+host = config.host
+port = config.port
 
 var server = http.createServer(router)
 
 server.listen(port, host, function() {
-  console.log('autarkeia is running on %s:%s', host, port)
+  console.log('Serving on %s:%s...', host, port)
 })
