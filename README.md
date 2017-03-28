@@ -1,3 +1,5 @@
 # autarkeia
 
-Near-zero-configuration self-contained blog-aware websites.
+> Happiness does not lack anything, but is **self-sufficient** [autarkes].
+>
+> — Aristotle, *Nicomachean Ethics*
