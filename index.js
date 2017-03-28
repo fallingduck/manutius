@@ -9,7 +9,7 @@ var yaml = require('js-yaml')
 
 /* Begin route definitions */
 
-// Define the git server
+// Git server
 server.route(/^\/\.git$/, function(req, res, next) {
   res.end('git server')
 })
@@ -29,12 +29,19 @@ server.route(/.*/, function(req, res) {
 
 
 // Create the server
-var config = yaml.safeLoad(fs.readFileSync(fixpath('config.yaml'), 'utf8'))
-host = config.host
-port = config.port
+fs.readFile(fixpath('config.yaml'), 'utf8', function(e, out) {
+  if (e) {
+    console.log(e)
+    return
+  }
 
-var server = server.makeServer()
+  var config = yaml.safeLoad(out)
+  var host = config.host
+  var port = config.port
 
-server.listen(port, host, function() {
-  console.log('Serving on %s:%s...', host, port)
+  var serv = server.makeServer()
+
+  serv.listen(port, host, function() {
+    console.log('Serving on %s:%s...', host, port)
+  })
 })
