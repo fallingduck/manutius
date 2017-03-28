@@ -1,4 +1,5 @@
 var server = require('./lib/server')
+var fixpath = require('./lib/fixpath')
 var yaml = require('js-yaml')
 var fs = require('fs')
 
@@ -17,7 +18,7 @@ server.route(/.*/, function(req, res) {
 
 
 // Create the server
-var config = yaml.safeLoad(fs.readFileSync('config.yaml', 'utf8'));
+var config = yaml.safeLoad(fs.readFileSync(fixpath('config.yaml'), 'utf8'));
 host = config.host
 port = config.port
 
