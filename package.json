@@ -4,7 +4,7 @@
   "description": "Near-zero-configuration self-contained blog-aware websites",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jacob VanDrunen",
