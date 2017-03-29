@@ -12,6 +12,7 @@
   "dependencies": {
     "git-http-backend": "^1.0.2",
     "js-yaml": "^3.8.2",
+    "read": "^1.0.7",
     "serve-static": "^1.12.1"
   }
 }

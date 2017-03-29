@@ -20,6 +20,32 @@ if (process.argv.length <= 2 || process.argv[2] == 'serve') {
   })
 }
 
+// Create a password hash
+else if (process.argv[2] == 'passwd') {
+  var read = require('read')
+  var hasher = require('./lib/hasher')
+  read({prompt: 'Password: ', silent: true}, function(err, password) {
+    if (err) {
+      console.log('\nOperation failed')
+      return
+    }
+    read({prompt: 'Confirm: ', silent: true}, function(err, password2) {
+      if (err) {
+        console.log('\nOperation failed')
+        return
+      }
+      if (password !== password2) {
+        console.log('Passwords do not match')
+        return
+      }
+      hasher(password, null, function(err, hash) {
+        if (err) throw err
+        console.log(hash)
+      })
+    })
+  })
+}
+
 // Print the help message
 else {
   var package = require('./package.json')
