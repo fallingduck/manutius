@@ -1,21 +1,18 @@
 // Start the server
-if (process.argv.length <= 2 || process.argv[2] == 'serve') {
+if (process.argv[2] == 'serve') {
   var fixPath = require('./lib/fixpath')
   var core = require('./lib/core')
   var fs = require('fs')
   var yaml = require('js-yaml')
+  var logger = require('./lib/logger')
 
-  fs.readFile(fixPath('config.yaml'), 'utf8', function(e, out) {
-    if (e) {
-      console.log(e)
-      return
-    }
-
+  fs.readFile(fixPath('config.yaml'), 'utf8', function(err, out) {
+    if (err) throw err
     var config = yaml.safeLoad(out)
     var host = config.host
     var port = config.port
     core.runServer(port, host, function() {
-      console.log('Serving on %s:%s...', host, port)
+      logger.logInfo('Serving on %s:%s...', host, port)
     })
   })
 }
