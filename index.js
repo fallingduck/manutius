@@ -1,24 +1,5 @@
-// Start the server
-if (process.argv[2] == 'serve') {
-  var fixPath = require('./lib/fixpath')
-  var core = require('./lib/core')
-  var fs = require('fs')
-  var yaml = require('js-yaml')
-  var logger = require('./lib/logger')
-
-  fs.readFile(fixPath('config.yaml'), 'utf8', function(err, out) {
-    if (err) throw err
-    var config = yaml.safeLoad(out)
-    var host = config.host
-    var port = config.port
-    core.runServer(port, host, function() {
-      logger.logInfo('Serving on %s:%s...', host, port)
-    })
-  })
-}
-
-// Create a password hash
-else if (process.argv[2] == 'passwd') {
+// Get a password from the user via the console
+var getPassword = function(callback) {
   var read = require('read')
   var hasher = require('./lib/hasher')
   read({prompt: 'Password: ', silent: true}, function(err, password) {
@@ -37,10 +18,106 @@ else if (process.argv[2] == 'passwd') {
       }
       hasher(password, null, function(err, hash) {
         if (err) throw err
-        console.log(hash)
+        callback(hash)
       })
     })
   })
+}
+
+
+// Start the server
+if (process.argv[2] == 'serve') {
+  var fixPath = require('./lib/fixpath')
+  var core = require('./lib/core')
+  var fs = require('fs')
+  var yaml = require('js-yaml')
+  var logger = require('./lib/logger')
+
+  fs.readFile(fixPath('config.yaml'), 'utf8', function(err, out) {
+    if (err) throw err
+    var config = yaml.safeLoad(out)
+    var host = config.host
+    var port = config.port
+    core.runServer(port, host, function() {
+      logger.logInfo('Serving on %s:%s', host, port)
+    })
+  })
+}
+
+// Add a user
+else if (process.argv[2] == 'user' && process.argv[3] == 'add') {
+  if (process.argv[4]) {
+    getPassword(function(hash) {
+      var fs = require('fs')
+      var fixPath = require('./lib/fixpath')
+
+      var users = JSON.parse(fs.readFileSync(fixPath('users.json')))
+      users[process.argv[4]] = hash
+      fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
+      console.log('Added user %s', process.argv[4])
+    })
+  } else {
+    console.log('Usage:')
+    console.log('  user add <user>')
+  }
+}
+
+// Change a user's password
+else if (process.argv[2] == 'user' && process.argv[3] == 'passwd') {
+  if (process.argv[4]) {
+    getPassword(function(hash) {
+      var fs = require('fs')
+      var fixPath = require('./lib/fixpath')
+
+      var users = JSON.parse(fs.readFileSync(fixPath('users.json')))
+      users[process.argv[4]] = hash
+      fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
+      console.log('Updated password for user %s', process.argv[4])
+    })
+  } else {
+    console.log('Usage:')
+    console.log('  user passwd <user>')
+  }
+}
+
+// Delete a user
+else if (process.argv[2] == 'user' && process.argv[3] == 'del') {
+  if (process.argv[4]) {
+    var fs = require('fs')
+    var fixPath = require('./lib/fixpath')
+
+    var users = JSON.parse(fs.readFileSync(fixPath('users.json')))
+    delete users[process.argv[4]]
+    fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
+    console.log('Deleted user %s', process.argv[4])
+  } else {
+    console.log('Usage:')
+    console.log('  user del <user>')
+  }
+}
+
+// Create a password hash to be imported by a remote admin
+else if (process.argv[2] == 'user' && process.argv[3] == 'export') {
+  getPassword(console.log)
+}
+
+// Import a new user with a user-provided password hash
+else if (process.argv[2] == 'user' && process.argv[3] == 'import') {
+  if (process.argv[4] && process.argv[5]) {
+    var fs = require('fs')
+    var fixPath = require('./lib/fixpath')
+
+    var users = JSON.parse(fs.readFileSync(fixPath('users.json')))
+    users[process.argv[4]] = process.argv[5]
+    fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
+    console.log('Added user %s', process.argv[4])
+  } else {
+    console.log('Usage:')
+    console.log('  user import <user> <password-hash>')
+    console.log()
+    console.log('Get the password hash from the user, it should look similar to:')
+    console.log('  6noKFJdNul0UFqYbMiSmsjpPROAEAtWLygC7oRDNVV7lis0XpscKCMbZHRksByfV')
+  }
 }
 
 // Print the help message
@@ -51,5 +128,10 @@ else {
   console.log()
   console.log('Available commands:')
   console.log('  serve')
+  console.log('  user add <user>')
+  console.log('  user passwd <user>')
+  console.log('  user del <user>')
+  console.log('  user export')
+  console.log('  user import <user> <password-hash>')
   console.log('  help')
 }
