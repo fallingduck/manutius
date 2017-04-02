@@ -25,8 +25,33 @@ var getPassword = function(callback) {
 }
 
 
+// Initialize the user database (should be run before any 'user' commands)
+if (process.argv[2] == 'init') {
+  var fs = require('fs')
+  var read = require('read')
+  var fixPath = require('./lib/fixpath')
+
+  if (fs.existsSync(fixPath('users.json'))) {
+    console.log('users.json already exists!')
+    return
+  }
+
+  read({prompt: 'New User: '}, function(err, username) {
+    if (err) {
+      console.log('\nOperation failed')
+      return
+    }
+    getPassword(function(hash) {
+      var users = {}
+      users[username] = hash
+      fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
+      console.log('Initialized user database!')
+    })
+  })
+}
+
 // Start the server
-if (process.argv[2] == 'serve') {
+else if (process.argv[2] == 'serve') {
   var fixPath = require('./lib/fixpath')
   var core = require('./lib/core')
   var fs = require('fs')
@@ -127,6 +152,7 @@ else {
   console.log(package.description)
   console.log()
   console.log('Available commands:')
+  console.log('  init')
   console.log('  serve')
   console.log('  user add <user>')
   console.log('  user passwd <user>')
