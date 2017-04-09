@@ -2,6 +2,7 @@
   "host": "localhost",
   "port": 3030,
   "logLevel": 2,
+  "siteRoot": "_site",
   "errorPages": {
     "404": "/404.html"
   }
