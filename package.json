@@ -4,6 +4,7 @@
   "description": "Near-zero-configuration self-contained blog-aware websites",
   "main": "index.js",
   "scripts": {
+    "postinstall": "dist/build",
     "start": "node index.js serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

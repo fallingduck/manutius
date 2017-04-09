@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mkdir site/
+cp -r dist/root site/root
+git init --bare site/site.git
+cp dist/config.json config.json
+node index.js init

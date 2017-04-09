@@ -58,4 +58,6 @@ typings/
 .env
 
 # User-specific account file
-users.json
+/users.json
+/config.json
+/site/
