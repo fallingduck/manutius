@@ -1,4 +1,4 @@
-// Get a password from the user via the console
+/* Get a password from the user via the console */
 var getPassword = function(callback) {
   var read = require('read')
   var hasher = require('./lib/hasher')
@@ -25,7 +25,7 @@ var getPassword = function(callback) {
 }
 
 
-// Initialize the user database (should be run before any 'user' commands)
+/* Initialize the user database (should be run before any 'user' commands) */
 if (process.argv[2] == 'init') {
   var fs = require('fs')
   var read = require('read')
@@ -50,7 +50,7 @@ if (process.argv[2] == 'init') {
   })
 }
 
-// Start the server
+/* Start the server */
 else if (process.argv[2] == 'serve') {
   var fixPath = require('./lib/fixpath')
   var core = require('./lib/core')
@@ -64,7 +64,7 @@ else if (process.argv[2] == 'serve') {
   })
 }
 
-// Add a user
+/* Add a user */
 else if (process.argv[2] == 'user' && process.argv[3] == 'add') {
   if (process.argv[4]) {
     getPassword(function(hash) {
@@ -82,7 +82,7 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'add') {
   }
 }
 
-// Change a user's password
+/* Change a user's password */
 else if (process.argv[2] == 'user' && process.argv[3] == 'passwd') {
   if (process.argv[4]) {
     getPassword(function(hash) {
@@ -100,7 +100,7 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'passwd') {
   }
 }
 
-// Delete a user
+/* Delete a user */
 else if (process.argv[2] == 'user' && process.argv[3] == 'del') {
   if (process.argv[4]) {
     var fs = require('fs')
@@ -116,12 +116,12 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'del') {
   }
 }
 
-// Create a password hash to be imported by a remote admin
+/* Create a password hash to be imported by a remote admin */
 else if (process.argv[2] == 'user' && process.argv[3] == 'export') {
   getPassword(console.log)
 }
 
-// Import a new user with a user-provided password hash
+/* Import a new user with a user-provided password hash */
 else if (process.argv[2] == 'user' && process.argv[3] == 'import') {
   if (process.argv[4] && process.argv[5]) {
     var fs = require('fs')
@@ -140,7 +140,7 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'import') {
   }
 }
 
-// Print the help message
+/* Print the help message */
 else {
   var package = require('./package.json')
   console.log('%s v%s', package.name, package.version)
@@ -148,11 +148,19 @@ else {
   console.log()
   console.log('Available commands:')
   console.log('  init')
+  console.log('    Initialize the user database with a new user')
   console.log('  serve')
+  console.log('    Start the server')
   console.log('  user add <user>')
+  console.log('    Add a user to the user database')
   console.log('  user passwd <user>')
+  console.log("    Change a user's password")
   console.log('  user del <user>')
+  console.log('    Delete a user')
   console.log('  user export')
+  console.log('    Create a user password hash for an admin to import')
   console.log('  user import <user> <password-hash>')
+  console.log('    Import a password hash given by a user')
   console.log('  help')
+  console.log('    Display this message')
 }
