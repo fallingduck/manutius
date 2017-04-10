@@ -14,7 +14,7 @@ var getPassword = function(callback) {
       }
       if (password !== password2) {
         console.log('Passwords do not match')
-        return
+        return getPassword(callback)
       }
       hasher(password, null, function(err, hash) {
         if (err) throw err
