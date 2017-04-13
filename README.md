@@ -17,8 +17,7 @@ service, or use a tool like `forever`:
 
 ```bash
 $ sudo npm install -g forever
-$ mkdir logs
-$ forever start -l logs/forever.log -o logs/out.log -e logs/err.log index.js
+$ forever start index.js serve
 ```
 
 ## Creating Your Site
@@ -65,3 +64,43 @@ be best to ensure security by TLS or perhaps
 [secure layer-3 protocols](https://github.com/cjdelisle/cjdns). The easiest way
 to safely open your new Manutius site to the world is probably by proxying the
 locally bound server through a web server like lighttpd, nginx, or Apache.
+
+## Collaboration
+
+You can add more users to the user database, allowing other people to push
+updates for the site from anywhere.
+
+```bash
+$ node index.js user add alice
+Password:
+Confirm:
+Added user alice
+```
+
+If other authors don't have access to the server, and don't want to give you
+their passwords, then they can use the command `user export`:
+
+```bash
+$ node index.js user export
+Password:
+Confirm:
+dxPhZLrnpaF0o/0o9iH1YnFW3kuu91QjYdG4GSFHn5ychAUDNi/eywvIH44BGdYF
+```
+
+The resulting password hash can then be input to the user database on the
+server:
+
+```bash
+$ node index.js user import bob dxPhZLrnpaF0o/0o9iH1YnFW3kuu91QjYdG4GSFHn5ychAUDNi/eywvIH44BGdYF
+Added user bob
+```
+
+Removing a user is as easy as:
+
+```bash
+$ node index.js user del alice
+Deleted user alice
+```
+
+All updates to the user database are immediately reflected, without having to
+restart Manutius.
