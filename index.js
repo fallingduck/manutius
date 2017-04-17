@@ -1,7 +1,7 @@
 /* Get a password from the user via the console */
 var getPassword = function(callback) {
   var read = require('read')
-  var hasher = require('./lib/hasher')
+  var bcrypt = require('bcrypt-nodejs')
   read({prompt: 'Password: ', silent: true}, function(err, password) {
     if (err) {
       console.log('\nOperation failed')
@@ -16,7 +16,7 @@ var getPassword = function(callback) {
         console.log('Passwords do not match')
         return getPassword(callback)
       }
-      hasher(password, null, function(err, hash) {
+      bcrypt.hash(password, null, null, function(err, hash) {
         if (err) throw err
         callback(hash)
       })
