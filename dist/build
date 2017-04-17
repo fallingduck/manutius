@@ -3,5 +3,6 @@
 mkdir site/
 cp -r dist/root site/root
 git init --bare site/site.git
+git --git-dir=site/site.git config receive.denyDeleteCurrent warn
 cp dist/config.json config.json
 node index.js init
