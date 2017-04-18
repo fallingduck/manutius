@@ -1,8 +1,6 @@
 #!/bin/bash
 
-mkdir site/
-cp -r dist/root site/root
-git init --bare site/site.git
-git --git-dir=site/site.git config receive.denyDeleteCurrent warn
+git init site
+git --git-dir=site/.git config receive.denyCurrentBranch updateInstead
 cp dist/config.json config.json
 node index.js init
