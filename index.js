@@ -1,48 +1,43 @@
-/* Get a password from the user via the console */
-var getPassword = function(callback) {
-  var read = require('read')
-  var bcrypt = require('bcrypt-nodejs')
-  read({prompt: 'Password: ', silent: true}, function(err, password) {
-    if (err) {
-      console.log('\nOperation failed')
-      return
-    }
-    read({prompt: 'Confirm: ', silent: true}, function(err, password2) {
-      if (err) {
-        console.log('\nOperation failed')
-        return
-      }
-      if (password !== password2) {
-        console.log('Passwords do not match')
-        return getPassword(callback)
-      }
-      bcrypt.hash(password, null, null, function(err, hash) {
-        if (err) throw err
-        callback(hash)
-      })
-    })
+// Start the server
+if (process.argv[2] == 'serve') {
+  const fixPath = require('./lib/fixpath')
+  const core = require('./lib/core')
+  const logger = require('./lib/logger')
+
+  const config = require(fixPath('config.json'))
+  const host = config.host
+  const port = config.port
+
+  core.runServer(port, host, () => {
+    logger.logInfo('Serving on %s:%s', host, port)
   })
 }
 
-
-/* Initialize the user database (should be run before any 'user' commands) */
-if (process.argv[2] == 'init') {
-  var fs = require('fs')
-  var read = require('read')
-  var fixPath = require('./lib/fixpath')
+// Initialize the user database (should be run before any 'user' commands)
+else if (process.argv[2] == 'init') {
+  const fs = require('fs')
+  const read = require('read')
+  const getPassword = require('./lib/getpassword')
+  const fixPath = require('./lib/fixpath')
 
   if (fs.existsSync(fixPath('users.json'))) {
     console.log('users.json already exists!')
     return
   }
 
-  read({prompt: 'New User: '}, function(err, username) {
+  read({prompt: 'New User: '}, (err, username) => {
     if (err) {
       console.log('\nOperation failed')
       return
     }
-    getPassword(function(hash) {
-      var users = {}
+
+    getPassword((err, hash) => {
+      if (err) {
+        console.log('\n%s', err)
+        return
+      }
+
+      const users = {}
       users[username] = hash
       fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
       console.log('Initialized user database!')
@@ -50,28 +45,20 @@ if (process.argv[2] == 'init') {
   })
 }
 
-/* Start the server */
-else if (process.argv[2] == 'serve') {
-  var fixPath = require('./lib/fixpath')
-  var core = require('./lib/core')
-  var logger = require('./lib/logger')
-
-  var config = require(fixPath('config.json'))
-  var host = config.host
-  var port = config.port
-  core.runServer(port, host, function() {
-    logger.logInfo('Serving on %s:%s', host, port)
-  })
-}
-
-/* Add a user */
+// Add a user
 else if (process.argv[2] == 'user' && process.argv[3] == 'add') {
   if (process.argv[4]) {
-    getPassword(function(hash) {
-      var fs = require('fs')
-      var fixPath = require('./lib/fixpath')
+    const fs = require('fs')
+    const getPassword = require('./lib/getpassword')
+    const fixPath = require('./lib/fixpath')
 
-      var users = JSON.parse(fs.readFileSync(fixPath('users.json')))
+    getPassword((err, hash) => {
+      if (err) {
+        console.log('\n%s', err)
+        return
+      }
+
+      const users = JSON.parse(fs.readFileSync(fixPath('users.json')))
       users[process.argv[4]] = hash
       fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
       console.log('Added user %s', process.argv[4])
@@ -82,14 +69,20 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'add') {
   }
 }
 
-/* Change a user's password */
+// Change a user's password
 else if (process.argv[2] == 'user' && process.argv[3] == 'passwd') {
   if (process.argv[4]) {
-    getPassword(function(hash) {
-      var fs = require('fs')
-      var fixPath = require('./lib/fixpath')
+    const fs = require('fs')
+    const getPassword = require('./lib/getpassword')
+    const fixPath = require('./lib/fixpath')
 
-      var users = JSON.parse(fs.readFileSync(fixPath('users.json')))
+    getPassword((err, hash) => {
+      if (err) {
+        console.log('\n%s', err)
+        return
+      }
+
+      const users = JSON.parse(fs.readFileSync(fixPath('users.json')))
       users[process.argv[4]] = hash
       fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
       console.log('Updated password for user %s', process.argv[4])
@@ -100,13 +93,13 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'passwd') {
   }
 }
 
-/* Delete a user */
+// Delete a user
 else if (process.argv[2] == 'user' && process.argv[3] == 'del') {
   if (process.argv[4]) {
-    var fs = require('fs')
-    var fixPath = require('./lib/fixpath')
+    const fs = require('fs')
+    const fixPath = require('./lib/fixpath')
 
-    var users = JSON.parse(fs.readFileSync(fixPath('users.json')))
+    const users = JSON.parse(fs.readFileSync(fixPath('users.json')))
     delete users[process.argv[4]]
     fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
     console.log('Deleted user %s', process.argv[4])
@@ -116,18 +109,22 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'del') {
   }
 }
 
-/* Create a password hash to be imported by a remote admin */
+// Create a password hash to be imported by a remote admin
 else if (process.argv[2] == 'user' && process.argv[3] == 'export') {
-  getPassword(console.log)
+  const getPassword = require('./lib/getpassword')
+
+  getPassword((err) => {
+    console.log('\n%s', err)
+  }, console.log)
 }
 
-/* Import a new user with a user-provided password hash */
+// Import a new user with a user-provided password hash
 else if (process.argv[2] == 'user' && process.argv[3] == 'import') {
   if (process.argv[4] && process.argv[5]) {
-    var fs = require('fs')
-    var fixPath = require('./lib/fixpath')
+    const fs = require('fs')
+    const fixPath = require('./lib/fixpath')
 
-    var users = JSON.parse(fs.readFileSync(fixPath('users.json')))
+    const users = JSON.parse(fs.readFileSync(fixPath('users.json')))
     users[process.argv[4]] = process.argv[5]
     fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
     console.log('Added user %s', process.argv[4])
@@ -140,9 +137,9 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'import') {
   }
 }
 
-/* Print the help message */
+// Print the help message
 else {
-  var package = require('./package.json')
+  const package = require('./package.json')
   console.log('%s v%s', package.name, package.version)
   console.log(package.description)
   console.log()
