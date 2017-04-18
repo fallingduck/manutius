@@ -1,6 +1,14 @@
 #!/bin/bash
 
-git init site
-git --git-dir=site/.git config receive.denyCurrentBranch updateInstead
-cp dist/config.json config.json
-node index.js init
+if [ ! -d site ]; then
+  git init site
+  git --git-dir=site/.git config receive.denyCurrentBranch updateInstead
+fi
+
+if [ ! -f config.json ]; then
+  cp dist/config.json config.json
+fi
+
+if [ ! -f users.json ]; then
+  node index.js init
+fi
