@@ -136,7 +136,7 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'import') {
     console.log('  user import <user> <password-hash>')
     console.log()
     console.log('Get the password hash from the user, it should look similar to:')
-    console.log('  6noKFJdNul0UFqYbMiSmsjpPROAEAtWLygC7oRDNVV7lis0XpscKCMbZHRksByfV')
+    console.log('  $2a$10$znBZF0YPZ1mdqCMdPwnEC.NTgXlXjDyg1x2hTmcTORh3jwi5UGsXO')
   }
 }
 
