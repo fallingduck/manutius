@@ -15,7 +15,7 @@ $ node index.js serve  # or `npm start`
 If you wish to run Manutius in the background, you can either create a system
 service, or use a tool like `forever`:
 
-```
+```bash
 $ sudo npm install -g forever
 $ forever start index.js serve
 ```
@@ -70,7 +70,7 @@ locally bound server through a web server like lighttpd, nginx, or Apache.
 You can add more users to the user database, allowing other people to push
 updates for the site from anywhere.
 
-```
+```bash
 $ node index.js user add alice
 Password:
 Confirm:
@@ -80,24 +80,25 @@ Added user alice
 If other authors don't have access to the server, and don't want to give you
 their passwords, then they can use the command `user export`:
 
-```
+```bash
 $ node index.js user export
 Password:
 Confirm:
-$2a$10$znBZF0YPZ1mdqCMdPwnEC.NTgXlXjDyg1x2hTmcTORh3jwi5UGsXO
+'$2a$10$znBZF0YPZ1mdqCMdPwnEC.NTgXlXjDyg1x2hTmcTORh3jwi5UGsXO'
 ```
 
 The resulting password hash can then be input to the user database on the
 server:
 
-```
-$ node index.js user import bob $2a$10$znBZF0YPZ1mdqCMdPwnEC.NTgXlXjDyg1x2hTmcTORh3jwi5UGsXO
+```bash
+# Using single quotes is important because of the '$'s
+$ node index.js user import bob '$2a$10$znBZF0YPZ1mdqCMdPwnEC.NTgXlXjDyg1x2hTmcTORh3jwi5UGsXO'
 Added user bob
 ```
 
 Removing a user is as easy as:
 
-```
+```bash
 $ node index.js user del alice
 Deleted user alice
 ```

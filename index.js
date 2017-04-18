@@ -113,9 +113,13 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'del') {
 else if (process.argv[2] == 'user' && process.argv[3] == 'export') {
   const getPassword = require('./lib/getpassword')
 
-  getPassword((err) => {
-    console.log('\n%s', err)
-  }, console.log)
+  getPassword((err, hash) => {
+    if (err) {
+      console.log('\n%s', err)
+      return
+    }
+    console.log("'%s'", hash)
+  })
 }
 
 // Import a new user with a user-provided password hash
