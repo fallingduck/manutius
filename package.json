@@ -13,6 +13,7 @@
   "dependencies": {
     "basic-auth": "^1.1.0",
     "bcrypt-nodejs": "0.0.3",
+    "compression": "^1.6.2",
     "git-http-backend": "^1.0.2",
     "read": "^1.0.7",
     "serve-static": "^1.12.1"
