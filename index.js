@@ -118,7 +118,7 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'export') {
       console.log('\n%s', err)
       return
     }
-    console.log("'%s'", hash)
+    console.log('\'%s\'', hash)
   })
 }
 
@@ -155,7 +155,7 @@ else {
   console.log('  user add <user>')
   console.log('    Add a user to the user database')
   console.log('  user passwd <user>')
-  console.log("    Change a user's password")
+  console.log('    Change a user\'s password')
   console.log('  user del <user>')
   console.log('    Delete a user')
   console.log('  user export')
