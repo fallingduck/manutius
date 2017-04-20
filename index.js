@@ -1,5 +1,5 @@
 // Start the server
-if (process.argv[2] == 'serve') {
+if (process.argv[2] == 'start') {
   const fixPath = require('./lib/fixpath')
   const core = require('./lib/core')
   const logger = require('./lib/logger')
