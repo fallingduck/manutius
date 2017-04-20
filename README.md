@@ -1,6 +1,16 @@
 # PatchServ
 
+[![Build Status](https://scrutinizer-ci.com/g/fallingduck/patchserv/badges/build.png?b=master)](https://scrutinizer-ci.com/g/fallingduck/patchserv/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fallingduck/patchserv/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fallingduck/patchserv/?branch=master)
+
 > Unopinionated static site server with easy, git-enabled collaboration
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Creating Your Site](#creating-your-site)
+- [Serving to the World](#serving-to-the-world)
+- [Collaboration](#collaboration)
 
 ## Installation
 
