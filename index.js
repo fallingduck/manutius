@@ -1,3 +1,5 @@
+const print = console.log
+
 // Start the server
 if (process.argv[2] == 'start') {
   const fixPath = require('./lib/fixpath')
@@ -21,26 +23,26 @@ else if (process.argv[2] == 'init') {
   const fixPath = require('./lib/fixpath')
 
   if (fs.existsSync(fixPath('users.json'))) {
-    console.log('users.json already exists!')
+    print('users.json already exists!')
     return
   }
 
   read({prompt: 'New User: '}, (err, username) => {
     if (err) {
-      console.log('\nOperation failed')
+      print('\nOperation failed')
       return
     }
 
     getPassword((err, hash) => {
       if (err) {
-        console.log('\n%s', err)
+        print('\n%s', err)
         return
       }
 
       const users = {}
       users[username] = hash
       fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
-      console.log('Initialized user database!')
+      print('Initialized user database!')
     })
   })
 }
@@ -54,18 +56,18 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'add') {
 
     getPassword((err, hash) => {
       if (err) {
-        console.log('\n%s', err)
+        print('\n%s', err)
         return
       }
 
       const users = JSON.parse(fs.readFileSync(fixPath('users.json')))
       users[process.argv[4]] = hash
       fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
-      console.log('Added user %s', process.argv[4])
+      print('Added user %s', process.argv[4])
     })
   } else {
-    console.log('Usage:')
-    console.log('  user add <user>')
+    print('Usage:')
+    print('  user add <user>')
   }
 }
 
@@ -78,18 +80,18 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'passwd') {
 
     getPassword((err, hash) => {
       if (err) {
-        console.log('\n%s', err)
+        print('\n%s', err)
         return
       }
 
       const users = JSON.parse(fs.readFileSync(fixPath('users.json')))
       users[process.argv[4]] = hash
       fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
-      console.log('Updated password for user %s', process.argv[4])
+      print('Updated password for user %s', process.argv[4])
     })
   } else {
-    console.log('Usage:')
-    console.log('  user passwd <user>')
+    print('Usage:')
+    print('  user passwd <user>')
   }
 }
 
@@ -102,10 +104,10 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'del') {
     const users = JSON.parse(fs.readFileSync(fixPath('users.json')))
     delete users[process.argv[4]]
     fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
-    console.log('Deleted user %s', process.argv[4])
+    print('Deleted user %s', process.argv[4])
   } else {
-    console.log('Usage:')
-    console.log('  user del <user>')
+    print('Usage:')
+    print('  user del <user>')
   }
 }
 
@@ -115,10 +117,10 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'export') {
 
   getPassword((err, hash) => {
     if (err) {
-      console.log('\n%s', err)
+      print('\n%s', err)
       return
     }
-    console.log('\'%s\'', hash)
+    print('\'%s\'', hash)
   })
 }
 
@@ -131,37 +133,37 @@ else if (process.argv[2] == 'user' && process.argv[3] == 'import') {
     const users = JSON.parse(fs.readFileSync(fixPath('users.json')))
     users[process.argv[4]] = process.argv[5]
     fs.writeFileSync(fixPath('users.json'), JSON.stringify(users, null, 2))
-    console.log('Added user %s', process.argv[4])
+    print('Added user %s', process.argv[4])
   } else {
-    console.log('Usage:')
-    console.log('  user import <user> <password-hash>')
-    console.log()
-    console.log('Get the password hash from the user, it should look similar to:')
-    console.log('  $2a$10$znBZF0YPZ1mdqCMdPwnEC.NTgXlXjDyg1x2hTmcTORh3jwi5UGsXO')
+    print('Usage:')
+    print('  user import <user> <password-hash>')
+    print()
+    print('Get the password hash from the user, it should look similar to:')
+    print('  $2a$10$znBZF0YPZ1mdqCMdPwnEC.NTgXlXjDyg1x2hTmcTORh3jwi5UGsXO')
   }
 }
 
 // Print the help message
 else {
   const package = require('./package.json')
-  console.log('%s v%s', package.name, package.version)
-  console.log(package.description)
-  console.log()
-  console.log('Available commands:')
-  console.log('  init')
-  console.log('    Initialize the user database with a new user')
-  console.log('  serve')
-  console.log('    Start the server')
-  console.log('  user add <user>')
-  console.log('    Add a user to the user database')
-  console.log('  user passwd <user>')
-  console.log('    Change a user\'s password')
-  console.log('  user del <user>')
-  console.log('    Delete a user')
-  console.log('  user export')
-  console.log('    Create a user password hash for an admin to import')
-  console.log('  user import <user> <password-hash>')
-  console.log('    Import a password hash given by a user')
-  console.log('  help')
-  console.log('    Display this message')
+  print('%s v%s', package.name, package.version)
+  print(package.description)
+  print()
+  print('Available commands:')
+  print('  init')
+  print('    Initialize the user database with a new user')
+  print('  serve')
+  print('    Start the server')
+  print('  user add <user>')
+  print('    Add a user to the user database')
+  print('  user passwd <user>')
+  print('    Change a user\'s password')
+  print('  user del <user>')
+  print('    Delete a user')
+  print('  user export')
+  print('    Create a user password hash for an admin to import')
+  print('  user import <user> <password-hash>')
+  print('    Import a password hash given by a user')
+  print('  help')
+  print('    Display this message')
 }
