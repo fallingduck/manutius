@@ -1,6 +1,6 @@
 {
   "name": "patchserv",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Unopinionated static site server with easy, git-enabled collaboration",
   "main": "index.js",
   "scripts": {

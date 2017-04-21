@@ -5,6 +5,19 @@
 
 > Unopinionated static site server with easy, git-enabled collaboration
 
+There are very few self-hosted Content Management Systems on the market that
+are both free and easy to use. I love GitHub Pages, but similarly painless
+options are hard to find for self-hosting, especially if you want to easily
+collaborate on a site with other people.
+
+Enter PatchServ. With a simple `git clone` and `npm install`, you have a
+high-performance webserver ready to serve your static site, which can be pushed
+from anywhere using Git. Collaboration is just as easy—giving other people
+commit access is trivial and secure with PatchServ's built-in account
+management. Because PatchServ is so unopinionated, you can use *any*
+static site generator you want in conjunction with it—or none at all.
+Painlessly self-host your web presence today with PatchServ!
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -13,6 +26,9 @@
 - [Collaboration](#collaboration)
 
 ## Installation
+
+PatchServ requires `node >= 7.0.0` and `git >= 2.3.0` for all features to
+work.
 
 ```bash
 # Clone repository
@@ -76,8 +92,9 @@ You can edit `config.json` to change the address which PatchServ binds to.
 Because you will need to authenticate to push your site to the server, it would
 be best to ensure security by TLS or perhaps
 [secure layer-3 protocols](https://github.com/cjdelisle/cjdns). The easiest way
-to safely open your new PatchServ site to the world is probably by proxying the
-locally bound server through a web server like lighttpd, nginx, or Apache.
+to safely open your new PatchServ site to the world in conjunction with other
+services is probably by proxying the locally bound server through a web server
+like lighttpd, nginx, or Apache.
 
 ## Collaboration
 
