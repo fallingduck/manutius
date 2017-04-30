@@ -1,7 +1,7 @@
 const print = console.log
 
 // Start the server
-if (process.argv[2] == 'start') {
+if (process.argv[2] == 'start' || process.argv[2] == 'serve') {
   const fixPath = require('./lib/fixpath')
   const core = require('./lib/core')
   const logger = require('./lib/logger')
@@ -152,7 +152,7 @@ else {
   print('Available commands:')
   print('  init')
   print('    Initialize the user database with a new user')
-  print('  serve')
+  print('  start')
   print('    Start the server')
   print('  user add <user>')
   print('    Add a user to the user database')
