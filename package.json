@@ -11,11 +11,11 @@
   "author": "Jacob VanDrunen",
   "license": "ISC",
   "dependencies": {
-    "basic-auth": "^1.1.0",
-    "bcrypt-nodejs": "0.0.3",
-    "compression": "^1.6.2",
+    "basic-auth": "^2.0.1",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
     "git-http-backend": "^1.0.2",
     "read": "^1.0.7",
-    "serve-static": "^1.12.1"
+    "serve-static": "^1.14.1"
   }
 }
